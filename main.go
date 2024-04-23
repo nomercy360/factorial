@@ -24,6 +24,10 @@ func main() {
 		_, _ = w.Write([]byte(strconv.Itoa(result)))
 	})
 
+	router.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte("Hello, world!"))
+	})
+
 	log.Println("Server running on port 8080")
 
 	_ = http.ListenAndServe(":8080", router)
