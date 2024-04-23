@@ -17,7 +17,7 @@ spec:
         service: server
     spec:
       containers:
-        - image: maksim1111/factorial:newest
+        - image: maksim1111/factorial:latest
           name: server
           imagePullPolicy: Always
           ports:
