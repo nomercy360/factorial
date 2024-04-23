@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: server
+  name: server
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: server
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: server
+    spec:
+      containers:
+        - image: maksim1111/factorial:newest
+          name: server
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              hostPort: 8080
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: server
+  name: server
+  namespace: default
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    service: server
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: server
+  namespace: default
+spec:
+    ingressClassName: nginx
+    rules:
+      - host: factorial.mxksim.dev
+        http:
+          paths:
+            - path: /
+              pathType: Prefix
+              backend:
+                service:
+                  name: server
+                  port:
+                    number: 8080
